@@ -1,7 +1,5 @@
-// src/controllers/emailController.ts
-
 import { Request, Response } from 'express';
-import { EmailService } from './../services/emailService.js';
+import { EmailService } from '../services/emailService.js';
 
 const emailService = new EmailService();
 
@@ -11,7 +9,24 @@ export async function sendEmail(req: Request, res: Response): Promise<void> {
   try {
     await emailService.sendEmail(idempotencyKey, to, subject, body);
     res.status(200).send({ message: 'Email sent successfully' });
-  } catch (error) {
-    res.status(500).send({ error: "An unknown error occurred" });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      switch (error.message) {
+        case 'Duplicate email send attempt':
+          res.status(409).send({ error: 'Duplicate email send attempt' });
+          break;
+        case 'Rate limit exceeded':
+          res.status(429).send({ error: 'Rate limit exceeded' });
+          break;
+        case 'Failed to send email after all retries':
+          res.status(500).send({ error: 'Failed to send email after all retries' });
+          break;
+        default:
+          res.status(500).send({ error: 'An unknown error occurred' });
+          break;
+      }
+    } else {
+      res.status(500).send({ error: 'An unknown error occurred' });
+    }
   }
 }

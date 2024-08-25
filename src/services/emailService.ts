@@ -22,7 +22,7 @@ export class EmailService {
     // Idempotency check
     if (this.idempotencyService.isDuplicate(idempotencyKey)) {
       console.log('Duplicate email send attempt, ignoring.');
-      return;
+      throw new Error('Duplicate email send attempt'); 
     }
 
     // Rate limiting
@@ -33,27 +33,26 @@ export class EmailService {
     let attempt = 0;
     let success = false;
     while (attempt < this.retryLimit && !success) {
-        try {
-          await this.providers[this.currentProviderIndex].sendEmail(to, subject, body);
-          success = true;
-          this.idempotencyService.markSent(idempotencyKey);
-          console.log('Email sent successfully');
-        } catch (error) {
-          if (error instanceof Error) {
-            console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
-          } else {
-            console.error(`Attempt ${attempt + 1} failed: An unknown error occurred`);
-          }
-          attempt++;
-          await exponentialBackoff(attempt);
-      
-          if (attempt === this.retryLimit) {
-            this.switchProvider();
-            attempt = 0;
-          }
+      try {
+        await this.providers[this.currentProviderIndex].sendEmail(to, subject, body);
+        success = true;
+        this.idempotencyService.markSent(idempotencyKey);
+        console.log('Email sent successfully');
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
+        } else {
+          console.error(`Attempt ${attempt + 1} failed: An unknown error occurred`);
+        }
+        attempt++;
+        await exponentialBackoff(attempt);
+        
+        if (attempt === this.retryLimit) {
+          this.switchProvider();
+          attempt = 0;
         }
       }
-      
+    }
 
     if (!success) {
       throw new Error('Failed to send email after all retries');

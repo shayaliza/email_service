@@ -2,7 +2,8 @@
 
 export class RateLimiterService {
     private requestsInLastMinute: number[] = [];
-    private rateLimit = 10; // max 10 emails per minute
+    // private rateLimit = 10; // max 10 emails per minute
+    private rateLimit = 1; // max 1 email per minute
   
     public allowRequest(): boolean {
       const now = Date.now();
