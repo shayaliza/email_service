@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es2020", // Specify ECMAScript target version
+    "module": "esnext", // Specify module code generation: "commonjs" or "esnext"
+    "rootDir": "src", // Specify the root directory of input files
+    "outDir": "dist", // Redirect output structure to the directory
+    "strict": true, // Enable all strict type-checking options
+    "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules via creation of `.default`
+    "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file.
+    "skipLibCheck": true, // Skip type checking of all declaration files (`*.d.ts`).
+    "noImplicitAny": true, // Raise error on expressions and declarations with an implied 'any' type.
+    "moduleResolution": "node", // Specify module resolution strategy: "node" or "classic"
+    "resolveJsonModule": true, // Include modules imported with `.json` extension
+    "isolatedModules": true, // Ensure `.ts` files can be safely transpiled without relying on other `.ts` files
+    "declaration": true, // Generates corresponding `.d.ts` file
+    "declarationMap": true, // Create sourcemaps for d.ts files
+    "sourceMap": true, // Generates corresponding '.map' file.
+    "baseUrl": ".", // Base directory to resolve non-absolute module names.
+    "paths": {
+      // List of path mapping entries for module names
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src"], // List of glob patterns that specify the files to be included in the program.
+  "exclude": ["node_modules", "dist"] // List of files to be excluded from compilation
+}
