@@ -1,5 +1,3 @@
-// src/index.ts
-
 import  express from 'express';
 import { sendEmail } from './controllers/emailController.js';
 
