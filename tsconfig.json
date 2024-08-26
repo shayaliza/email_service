@@ -3,7 +3,7 @@
     "target": "es2020", // Specify ECMAScript target version
     "module": "esnext", // Specify module code generation: "commonjs" or "esnext"
     "rootDir": "src", // Specify the root directory of input files
-    "outDir": "dist", // Redirect output structure to the directory
+    "outDir": "public", // Redirect output structure to the directory
     "strict": true, // Enable all strict type-checking options
     "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules via creation of `.default`
     "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file.
